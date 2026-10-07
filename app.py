@@ -1,3 +1,45 @@
+import streamlit as st
+from supabase import create_client, Client
+import os
+import uuid
+import pandas as pd
+
+# Streamlit Secrets'ta hata olursa sol menüden (sidebar) manuel alma imkanı
+try:
+    SUPABASE_URL = st.secrets["SUPABASE_URL"]
+    SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+except Exception:
+    st.sidebar.warning("⚠️ Secrets okunamadı. Bilgileri buradan girebilirsin:")
+    SUPABASE_URL = st.sidebar.text_input("Supabase URL", value="https://hsobtrfmakfhbcnlugkl.supabase.co")
+    SUPABASE_KEY = st.sidebar.text_input("Supabase Key (anon public)", type="password")
+
+if not SUPABASE_URL or not SUPABASE_KEY or not SUPABASE_URL.startswith("https://"):
+    st.error("🚨 Lütfen sol menüden geçerli bir Supabase URL ve Key girin.")
+    st.stop()
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)ß
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import os
 import uuid
 import pandas as pd
