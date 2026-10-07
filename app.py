@@ -8,6 +8,90 @@ from supabase import create_client, Client
 # --- SAYFA YAPISI ---
 st.set_page_config(page_title="T1D Karb & Gıda Kayıt", layout="wide", page_icon="🍽️")
 
+# --- ÖZEL KOYU YEŞİL & SİYAH TEMASI (CSS) ---
+st.markdown("""
+<style>
+    /* Ana Arka Plan */
+    .stApp {
+        background-color: #080c0a;
+        color: #e2e8f0;
+    }
+    
+    /* Üst Başlık ve Yazılar */
+    h1, h2, h3, h4, h5, h6, p, span {
+        color: #e2e8f0 !important;
+    }
+    
+    /* Sidebar (Sol Menü) */
+    [data-testid="stSidebar"] {
+        background-color: #040705;
+        border-right: 1px solid #112217;
+    }
+    
+    /* Butonlar (Zümrüt Yeşili Gradyan) */
+    .stButton>button {
+        background: linear-gradient(135deg, #059669, #047857);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        border-color: #10b981;
+    }
+    
+    /* Girdi Kutuları (Input / Textarea) */
+    input, textarea, select {
+        background-color: #0e1712 !important;
+        color: #f8fafc !important;
+        border: 1px solid #163020 !important;
+        border-radius: 8px !important;
+    }
+    input:focus, textarea:focus {
+        border-color: #10b981 !important;
+        box-shadow: 0 0 0 1px #10b981 !important;
+    }
+    
+    /* Sekmeler (Tabs) */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+        background-color: transparent;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #0e1712;
+        border-radius: 8px;
+        color: #94a3b8;
+        padding: 8px 16px;
+        border: 1px solid #163020;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #065f46 !important;
+        color: #ffffff !important;
+        border-color: #10b981 !important;
+    }
+    
+    /* Kartlar ve Konteynerler */
+    [data-testid="stVerticalBlock"] > div[style*="border"] {
+        background-color: #0e1712;
+        border: 1px solid #163020;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+    
+    /* Expander Tasarımı */
+    .streamlit-expanderHeader {
+        background-color: #0e1712;
+        border: 1px solid #163020;
+        border-radius: 8px;
+        color: #10b981 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🍽️ T1D Karbonhidrat & Görüntü Kayıt Asistanı")
 st.caption("Gelecekteki yapay zeka modelini eğitmek için tartılmış porsiyon veri tabanı.")
 
@@ -32,7 +116,6 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
     ext = os.path.splitext(image_file.name)[1] if hasattr(image_file, "name") else ".jpg"
     file_name = f"{uuid.uuid4().hex}{ext}"
 
-    # Supabase Storage'a yükle
     supabase.storage.from_(BUCKET_NAME).upload(
         file_name, file_bytes, {"content-type": "image/jpeg"}
     )
