@@ -93,7 +93,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🍽️Karbonhidrat Sayım Kayıt Asistanı🍽️")
-st.caption("ESOGU 200kg diyetiisyen kadına inat kendim için yaptım.")
+st.caption("ESOGU 200kg diyetisyen kadına inat kendim için yaptım.")
 
 # --- BAĞLANTI (Secrets veya Sol Menü) ---
 try:
