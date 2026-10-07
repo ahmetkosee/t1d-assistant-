@@ -92,8 +92,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🍽️ T1D Karbonhidrat & Görüntü Kayıt Asistanı")
-st.caption("Gelecekteki yapay zeka modelini eğitmek için tartılmış porsiyon veri tabanı.")
+st.title("🍽️Karbonhidrat Sayım Kayıt Asistanı🍽️")
+st.caption("ESOGU 200kg diyetiisyen kadına inat kendim için yaptım.")
 
 # --- BAĞLANTI (Secrets veya Sol Menü) ---
 try:
