@@ -17,7 +17,7 @@ if not SUPABASE_URL or not SUPABASE_KEY or not SUPABASE_URL.startswith("https://
     st.error("🚨 Lütfen sol menüden geçerli bir Supabase URL ve Key girin.")
     st.stop()
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)ß
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 
