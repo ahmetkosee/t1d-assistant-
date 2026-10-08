@@ -111,7 +111,6 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
     ext = os.path.splitext(image_file.name)[1] if hasattr(image_file, "name") else ".jpg"
     file_name = f"{uuid.uuid4().hex}{ext}"
 
-    # Uzantıya göre doğru content-type belirleyelim
     content_type = "image/jpeg"
     if ext.lower() == ".png":
         content_type = "image/png"
@@ -119,7 +118,6 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
         content_type = "image/webp"
 
     try:
-        # Supabase Storage'a yükleme (upsert=True ile çakışmaları önleyelim)
         supabase.storage.from_(BUCKET_NAME).upload(
             file_name, 
             file_bytes, 
@@ -127,18 +125,10 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
         )
     except Exception as e:
         st.error(f"🚨 Supabase Storage Hatası Detayı: {e}")
-        return  # Hata varsa veritabanına kayıt atılmasını durdur
+        return
 
-   # Eskisi: image_url = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
-    
-    # Doğru ve tam URL formatı için:
-    public_url_res = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
-    
-    # Bazı Supabase sürümleri dict, bazıları string döndürebilir, bunu garantiye alalım:
-    if isinstance(public_url_res, dict):
-        image_url = public_url_res.get("publicUrl") or public_url_res.get("data", {}).get("publicUrl", "")
-    else:
-        image_url = public_url_res
+    # --- KESİN VE HATASIZ PUBLIC URL OLUŞTURMA ---
+    image_url = f"{SUPABASE_URL}/storage/v1/object/public/{BUCKET_NAME}/{file_name}"
 
     carbs_per_100g = (carbs_g / weight_g) * 100 if weight_g > 0 else 0
     suggested_insulin = carbs_g / kio if kio > 0 else 0
