@@ -129,7 +129,16 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
         st.error(f"🚨 Supabase Storage Hatası Detayı: {e}")
         return  # Hata varsa veritabanına kayıt atılmasını durdur
 
-    image_url = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
+   # Eskisi: image_url = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
+    
+    # Doğru ve tam URL formatı için:
+    public_url_res = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
+    
+    # Bazı Supabase sürümleri dict, bazıları string döndürebilir, bunu garantiye alalım:
+    if isinstance(public_url_res, dict):
+        image_url = public_url_res.get("publicUrl") or public_url_res.get("data", {}).get("publicUrl", "")
+    else:
+        image_url = public_url_res
 
     carbs_per_100g = (carbs_g / weight_g) * 100 if weight_g > 0 else 0
     suggested_insulin = carbs_g / kio if kio > 0 else 0
