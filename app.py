@@ -95,14 +95,9 @@ st.markdown("""
 st.title("🍽️Karbonhidrat Sayım Kayıt Asistanı🍽️")
 st.caption("ESOGU 200kg diyetisyen kadına inat kendim için yaptım.")
 
-# --- BAĞLANTI (Secrets veya Sol Menü) ---
-try:
-    SUPABASE_URL = st.secrets["SUPABASE_URL"]
-    SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
-except Exception:
-    st.sidebar.warning("⚠️ Secrets okunamadı. Bilgileri buradan girebilirsin:")
-    SUPABASE_URL = st.sidebar.text_input("Supabase URL", value="https://hsobtrfmakfhbcnlugkl.supabase.co")
-    SUPABASE_KEY = st.sidebar.text_input("Supabase Key (anon public)", type="password")
+# --- BAĞLANTI ---
+SUPABASE_URL = "https://hsobtrfmakfhbcnlugkl.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhzb2J0cmZtYWtmaGJjbmx1Z2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzOTQ4NzEsImV4cCI6MjEwNjk3MDg3MX0.4j0fd_aJ0Ww5H8itTmg-tzMw9HKSQmXyp7aXeLNraxQ"
 
 if not SUPABASE_URL or not SUPABASE_KEY or not SUPABASE_URL.startswith("https://"):
     st.error("🚨 Lütfen sol menüden geçerli bir Supabase URL ve Key girin.")
