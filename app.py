@@ -116,9 +116,24 @@ def insert_meal(food_name, weight_g, carbs_g, protein_g, fat_g, kio, image_file,
     ext = os.path.splitext(image_file.name)[1] if hasattr(image_file, "name") else ".jpg"
     file_name = f"{uuid.uuid4().hex}{ext}"
 
-    supabase.storage.from_(BUCKET_NAME).upload(
-        file_name, file_bytes, {"content-type": "image/jpeg"}
-    )
+    # Uzantıya göre doğru content-type belirleyelim
+    content_type = "image/jpeg"
+    if ext.lower() == ".png":
+        content_type = "image/png"
+    elif ext.lower() == ".webp":
+        content_type = "image/webp"
+
+    try:
+        # Supabase Storage'a yükleme (upsert=True ile çakışmaları önleyelim)
+        supabase.storage.from_(BUCKET_NAME).upload(
+            file_name, 
+            file_bytes, 
+            file_options={"content-type": content_type, "upsert": "true"}
+        )
+    except Exception as e:
+        st.error(f"🚨 Supabase Storage Hatası Detayı: {e}")
+        return  # Hata varsa veritabanına kayıt atılmasını durdur
+
     image_url = supabase.storage.from_(BUCKET_NAME).get_public_url(file_name)
 
     carbs_per_100g = (carbs_g / weight_g) * 100 if weight_g > 0 else 0
